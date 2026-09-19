@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jevgram</title>
+  <meta name="description" content="Upload a research paper and see which sentences read as human written, AI assisted or AI generated, judged by Jev.">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="wordmark" href="/" aria-label="Jevgram home">
+      <span class="wordmark-mark" aria-hidden="true"></span>Jevgram
+    </a>
+    <button id="reset" class="button" type="button" hidden>Check another paper</button>
+  </header>
+
+  <main>
+    <section id="upload-view" class="upload-view">
+      <div class="intro">
+        <h1>Find the sentences in a paper that read as <span class="nowrap">AI-written.</span></h1>
+        <p class="lede">
+          Drop in a PDF. Jev reads every sentence, every paragraph and the paper as a whole,
+          then marks each sentence as human written, AI assisted or AI generated, with how sure it is.
+        </p>
+
+        <label id="dropzone" class="dropzone" for="file-input">
+          <input id="file-input" type="file" accept="application/pdf,.pdf">
+          <svg class="dropzone-icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 17v-6"/><path d="m9.5 13.5 2.5-2.5 2.5 2.5"/></svg>
+          <span class="dropzone-text">
+            <strong>Choose a PDF or drop it here</strong>
+            <span>Research papers up to 50 MB. Scanned PDFs need OCR first.</span>
+          </span>
+        </label>
+        <p id="upload-error" class="error" role="alert" hidden></p>
+      </div>
+
+      <figure class="specimen" aria-label="Example of Jevgram's markup">
+        <div class="specimen-page">
+          <p class="specimen-heading">Abstract</p>
+          <p class="specimen-text">
+            <mark class="hl-sample human_written">We measure how often small robots lose traction on wet ramps.</mark>
+            <mark class="hl-sample human_written">Across 212 trials the failure rate rose from 4% to 19% once the surface film passed 0.3&nbsp;mm.</mark>
+            <mark class="hl-sample ai_generated is-active">These findings underscore the pivotal role of surface conditions in shaping robust robotic locomotion across diverse real-world settings.</mark>
+            <mark class="hl-sample ai_assisted">Building on this, we further propose a lightweight friction estimator that seamlessly adapts to changing terrain.</mark>
+            <mark class="hl-sample human_written">Code and logs are in the supplement.</mark>
+          </p>
+          <div class="specimen-card" aria-hidden="true">
+            <span class="chip ai_generated">AI generated</span>
+            <span class="specimen-card-score">81% sure</span>
+          </div>
+        </div>
+        <figcaption>
+          <span class="chip ai_generated">AI generated</span>
+          <span class="chip ai_assisted">AI assisted</span>
+          <span class="chip human_written">Human written</span>
+        </figcaption>
+      </figure>
+
+      <section class="method" aria-labelledby="method-title">
+        <h2 id="method-title">How Jev judges a paper</h2>
+        <div class="method-levels">
+          <div>
+            <h3>Every sentence</h3>
+            <p>Asked three times: on its own, with the sentences before and after it, and inside its paragraph. The three answers are averaged into the highlight you see.</p>
+          </div>
+          <div>
+            <h3>Every paragraph</h3>
+            <p>Each paragraph is judged as one piece of writing, so a single odd sentence carries less weight.</p>
+          </div>
+          <div>
+            <h3>The whole paper</h3>
+            <p>The full text is judged at once. Long papers are split into as few parts as fit, and the parts are averaged.</p>
+          </div>
+        </div>
+        <p class="method-note">The overall verdict is the average of those three scores. Your PDF stays on this machine; only its text is sent to Jev.</p>
+      </section>
+    </section>
+
+    <section id="loading-view" class="loading-view" hidden aria-live="polite">
+      <div class="scanner" aria-hidden="true"><span></span></div>
+      <p class="loading-file" id="loading-file"></p>
+      <p class="muted">Jev is reading every sentence, paragraph and the whole paper. <span id="loading-elapsed">0 s</span></p>
+    </section>
+
+    <section id="result-view" class="result-view" hidden>
+      <section class="verdict" aria-label="Paper verdict">
+        <div class="verdict-main">
+          <p class="verdict-kicker">Overall verdict</p>
+          <p class="verdict-label" id="verdict-label"></p>
+          <div class="stacked-bar large" id="verdict-bar" aria-hidden="true"></div>
+          <p class="verdict-note">The average of the three scores alongside.</p>
+        </div>
+        <table class="verdict-parts">
+          <thead>
+            <tr><th scope="col">Judged by</th><th scope="col"><span class="visually-hidden">Split</span></th><th scope="col">AI</th><th scope="col">Assisted</th><th scope="col">Human</th></tr>
+          </thead>
+          <tbody id="verdict-rows"></tbody>
+        </table>
+      </section>
+
+      <div id="pages" class="pages" aria-label="Annotated paper"></div>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <h2 class="file-name" id="file-name"></h2>
+          <dl class="facts" id="facts"></dl>
+          <ul class="label-filter" id="label-filter" aria-label="Show sentences by label"></ul>
+          <label class="slider">
+            <span>Hide answers below <output id="min-confidence-value">0%</output> confidence</span>
+            <input id="min-confidence" type="range" min="0" max="100" step="5" value="0">
+          </label>
+          <p class="muted small" id="visible-count"></p>
+        </section>
+
+        <section class="panel" id="detail">
+          <h2>Selected sentence</h2>
+          <p class="muted small" id="detail-empty">Click a highlighted sentence to see how Jev judged it.</p>
+          <div id="detail-body" hidden>
+            <p class="detail-label"><span class="chip" id="detail-chip"></span> <span id="detail-confidence"></span></p>
+            <blockquote id="detail-text"></blockquote>
+            <table class="views">
+              <caption>Jev's answer in each view, and their average</caption>
+              <thead><tr><th scope="col">View</th><th scope="col">AI</th><th scope="col">Assisted</th><th scope="col">Human</th></tr></thead>
+              <tbody id="detail-views"></tbody>
+            </table>
+            <p class="muted small" id="detail-location"></p>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Judgments by <a href="https://typesafe.ai" rel="noopener">Jev</a>, TypeSafe's System One model.
+  </footer>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

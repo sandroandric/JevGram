@@ -1,0 +1,16 @@
+# Secrets: copy .env.example to .env and add your own key.
+.env
+
+# Python and tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Papers you test locally stay out of the repository.
+/*.pdf
+
+.DS_Store
+
+# Local project history (kept private)
+LOG.md
