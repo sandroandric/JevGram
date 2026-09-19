@@ -196,3 +196,15 @@ Jevgram's code is released under the [MIT License](LICENSE). It depends on
 [PyMuPDF](https://pymupdf.readthedocs.io), which is licensed under AGPL-3.0; if you
 distribute Jevgram or offer it as a network service, PyMuPDF's terms apply to that combined
 work.
+
+---
+
+<p align="center">
+  Developed by<br><br>
+  <a href="https://bysandro.com">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/images/bysandro-dark.svg">
+      <img src="docs/images/bysandro-light.svg" alt="bySandro" height="36">
+    </picture>
+  </a>
+</p>

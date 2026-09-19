@@ -480,11 +480,25 @@ blockquote {
 .tooltip .row .swatch { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
 
 .footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 24px;
   padding: 24px 32px 32px;
-  text-align: center;
   font-size: 13px;
   color: var(--ink-soft);
 }
+.footer p { margin: 0; }
+.made-by {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.made-by img { display: block; height: 18px; width: auto; }
+.made-by:hover { color: var(--ink); }
 
 @media (max-width: 1000px) {
   .upload-view { grid-template-columns: 1fr; gap: 48px; padding: 40px 20px; }
