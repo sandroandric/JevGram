@@ -6,6 +6,12 @@
   <title>Jevgram</title>
   <meta name="description" content="Upload a research paper and see which sentences read as human written, AI assisted or AI generated, judged by Jev.">
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jevgram">
+  <meta property="og:description" content="See which sentences in a research paper read as human written, AI assisted or AI generated, judged by Jev.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/sandroandric/JevGram/main/docs/images/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/sandroandric/JevGram/main/docs/images/social-preview.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
@@ -16,7 +22,13 @@
     <a class="wordmark" href="/" aria-label="Jevgram home">
       <span class="wordmark-mark" aria-hidden="true"></span>Jevgram
     </a>
-    <button id="reset" class="button" type="button" hidden>Check another paper</button>
+    <div class="topbar-actions">
+      <button id="reset" class="button" type="button" hidden>Check another paper</button>
+      <a class="made-by" href="https://bysandro.com" rel="noopener">
+        <span class="made-by-text">Developed by</span>
+        <img src="/static/bysandro.svg" alt="bySandro" height="18">
+      </a>
+    </div>
   </header>
 
   <main>
@@ -136,10 +148,7 @@
   </main>
 
   <footer class="footer">
-    <p>Judgments by <a href="https://typesafe.ai" rel="noopener">Jev</a>, TypeSafe's System One model.</p>
-    <a class="made-by" href="https://bysandro.com" rel="noopener">
-      Developed by <img src="/static/bysandro.svg" alt="bySandro" height="18">
-    </a>
+    Judgments by <a href="https://typesafe.ai" rel="noopener">Jev</a>, TypeSafe's System One model.
   </footer>
 
   <div id="tooltip" class="tooltip" role="tooltip" hidden></div>

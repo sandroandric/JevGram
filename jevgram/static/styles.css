@@ -480,17 +480,16 @@ blockquote {
 .tooltip .row .swatch { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; }
 
 .footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 8px 24px;
   padding: 24px 32px 32px;
+  text-align: center;
   font-size: 13px;
   color: var(--ink-soft);
 }
-.footer p { margin: 0; }
+
+.topbar-actions { display: flex; align-items: center; gap: 24px; }
+
 .made-by {
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -510,6 +509,8 @@ blockquote {
 }
 
 @media (max-width: 560px) {
+  .made-by-text { display: none; }
+  .topbar-actions { gap: 14px; }
   .verdict-parts td.bar, .verdict-parts th:nth-child(2) { display: none; }
   .specimen-page { padding: 28px 24px 24px; transform: none; }
   .specimen-card { position: static; margin-top: 16px; width: fit-content; transform: none; }
